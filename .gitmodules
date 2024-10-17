@@ -1,0 +1,4 @@
+[submodule "simple-svg"]
+    path = simple-svg
+    url = https://github.com/adishavit/simple-svg.git
+    ignore = dirty
