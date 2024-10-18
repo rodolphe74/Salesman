@@ -2,71 +2,64 @@
 
 #pragma once
 
+#include <iostream>
+#include <map>
 #include <ostream>
 #include <utility>
 #include <vector>
-#include <map>
-#include <iostream>
 
 namespace rc {
 class NodeBase {
-public:
+  public:
     int index;
-    friend std::ostream &operator << (std::ostream &os, const NodeBase n)
-    {
+    friend std::ostream &operator<<(std::ostream &os, const NodeBase n) {
         os << n.index;
         return os;
     };
 };
 
 class EdgeBase {
-public:
+  public:
     int index;
-    friend std::ostream &operator << (std::ostream &os, const EdgeBase n)
-    {
+    friend std::ostream &operator<<(std::ostream &os, const EdgeBase n) {
         os << n.index;
         return os;
     };
 };
 
-
-template <class T, class U>
-class Graph {
+template <class T, class U> class Graph {
     static_assert(std::is_base_of<NodeBase, T>::value,
-      "T must derive from NodeBase");
+                  "T must derive from NodeBase");
     static_assert(std::is_base_of<EdgeBase, U>::value,
-      "U must derive from EdgeBase");
+                  "U must derive from EdgeBase");
 
     typedef std::vector<T *> Path;
 
-private:
-    std::map<T *, std::vector<T *> > nodes;
+  private:
+    std::map<T *, std::vector<T *>> nodes;
     std::map<int, T *> nodesPerIndex;
     std::map<std::pair<T *, T *>, U *> edges;
     int nodeIndex = 0;
     int edgeIndex = 0;
     bool hasCycle = false;
     bool *visited;
-    int howMuch        = 0;
+    int howMuch = 0;
     int countHamCycles = 0;
     bool stopRecursion = false;
 
-    int getNodeIndex(T *t)
-    {
+    int getNodeIndex(T *t) {
         NodeBase *e = dynamic_cast<NodeBase *>(t);
 
         return e->index;
     }
 
-    int getEdgeIndex(U *u)
-    {
+    int getEdgeIndex(U *u) {
         EdgeBase *e = dynamic_cast<EdgeBase *>(u);
 
         return e->index;
     }
 
-    bool isSafe(T *n, Path &p, int pos)
-    {
+    bool isSafe(T *n, Path &p, int pos) {
         // If the vertex is adjacent to
         // the vertex of the previously
         // added vertex
@@ -87,8 +80,8 @@ private:
         return true;
     }
 
-    void findHamCycle(int pos, Path &p, bool visited[], int size, std::vector<Path> *hamCycles = NULL)
-    {
+    void findHamCycle(int pos, Path &p, bool visited[], int size,
+                      std::vector<Path> *hamCycles = NULL) {
         // If all vertices are included
         // in Hamiltonian Cycle
         if (pos == size) {
@@ -125,7 +118,6 @@ private:
                 // Update the hasCycle
                 // as true
                 hasCycle = true;
-                std::cout << std::endl;
             }
             return;
         }
@@ -153,22 +145,19 @@ private:
         }
     } // findHamCycle
 
-public:
-    
-    Graph<>()
-    {
+  public:
+    Graph<>() {
         nodeIndex = 0;
         edgeIndex = 0;
     }
 
-    int addNode(T &t)
-    {
+    int addNode(T &t) {
         if (nodes.find(&t) != nodes.end()) {
             NodeBase *n = dynamic_cast<NodeBase *>(&t);
             return n->index;
         } else {
             std::vector<T *> v;
-            std::pair<T *, std::vector<T *> > p(&t, v);
+            std::pair<T *, std::vector<T *>> p(&t, v);
             NodeBase *n = dynamic_cast<NodeBase *>(p.first);
             n->index = nodeIndex;
             nodes.insert(p);
@@ -178,18 +167,11 @@ public:
         }
     }
 
-    int getSize()
-    {
-        return nodeIndex;
-    }
+    int getSize() { return nodeIndex; }
 
-    std::vector<T *> getAdjacents(T &t)
-    {
-        return nodes.at(&t);
-    }
+    std::vector<T *> getAdjacents(T &t) { return nodes.at(&t); }
 
-    bool isAdjacent(T *n, T *m)
-    {
+    bool isAdjacent(T *n, T *m) {
         std::vector<T *> *v = &nodes.at(n);
 
         for (auto i = v->begin(); i != v->end(); i++) {
@@ -200,8 +182,7 @@ public:
         return false;
     }
 
-    int addEdge(T *n, T *m, U *e)
-    {
+    int addEdge(T *n, T *m, U *e) {
         if (nodes.find(n) != nodes.end() && nodes.find(m) != nodes.end()) {
             // add adjacent
             std::vector<T *> *v = &nodes.at(n);
@@ -220,8 +201,7 @@ public:
         return -1;
     }
 
-    U * getEdge(T *n, T *m)
-    {
+    U *getEdge(T *n, T *m) {
         std::pair<T *, T *> p = std::make_pair(n, m);
 
         if (edges.find(p) == edges.end()) {
@@ -242,41 +222,29 @@ public:
     /*     return NULL; */
     /* } */
 
-    T * getNodeByIndex(int index)
-    {
+    T *getNodeByIndex(int index) {
         T *t = nodesPerIndex.at(index);
 
         return t;
     }
 
-    std::map<T *, std::vector<T *> >::iterator nodesBegin()
-    {
+    std::map<T *, std::vector<T *>>::iterator nodesBegin() {
         return nodes.begin();
     }
 
-    std::map<T *, std::vector<T *> >::iterator nodesEnd()
-    {
-        return nodes.end();
-    }
+    std::map<T *, std::vector<T *>>::iterator nodesEnd() { return nodes.end(); }
 
-    size_t nodeSize()
-    {
-        return nodes.size();
-    }
+    size_t nodeSize() { return nodes.size(); }
 
-    size_t edgeSize()
-    {
-        return edges.size();
-    }
+    size_t edgeSize() { return edges.size(); }
 
-    void hamCycle(int hm = 1, std::vector<Path> *hamCycles = NULL)
-    {
+    void hamCycle(int hm = 1, std::vector<Path> *hamCycles = NULL) {
         // Initially value of boolean
         // flag is false
-        hasCycle       = false;
-        howMuch        = hm;
+        hasCycle = false;
+        howMuch = hm;
         countHamCycles = 0;
-        stopRecursion  = false;
+        stopRecursion = false;
 
         // Store the resultant path
         Path p;
@@ -308,8 +276,7 @@ public:
         delete[] visited;
     } // hamCycle
 
-    friend std::ostream&operator << (std::ostream &os, Graph<T, U> &g)
-    {
+    friend std::ostream &operator<<(std::ostream &os, Graph<T, U> &g) {
         for (auto n = g.nodes.begin(); n != g.nodes.end(); n++) {
             os << *(n->first) << std::endl;
 
@@ -320,14 +287,11 @@ public:
         }
         return os;
     }
-    void displayPath(Path &p)
-    {
-        for (int i = 0; i < p.size() ; i++) {
+    void displayPath(Path &p) {
+        for (int i = 0; i < p.size(); i++) {
             T *d = p.at(i);
             std::cout << "    " << *d << std::endl;
         }
     }
-
-
 };
-}
+} // namespace rc

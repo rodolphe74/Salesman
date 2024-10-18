@@ -1,8 +1,7 @@
 #include "GraphSalesman.hpp"
 #include <ostream>
 
-int main()
-{
+int main() {
     // rc::Graph<NodeSalesman, EdgeSalesman> g;
     GraphSalesman g;
 
@@ -44,13 +43,10 @@ int main()
     NodeSalesman n35("Troyes", 655, 290);
 
     // Node container
-    std::vector<NodeSalesman> towns =
-    {
-        n0,  n1,  n2,  n3,  n4,  n5,  n6,  n7,  n8,  n9,
-        n10, n11, n12, n13, n14, n15, n16, n17, n18, n19,
-        n20, n21, n22, n23, n24, n25, n26, n27, n28, n29,
-        n30, n31, n32, n33, n34, n35
-    };
+    std::vector<NodeSalesman> towns = {
+        n0,  n1,  n2,  n3,  n4,  n5,  n6,  n7,  n8,  n9,  n10, n11,
+        n12, n13, n14, n15, n16, n17, n18, n19, n20, n21, n22, n23,
+        n24, n25, n26, n27, n28, n29, n30, n31, n32, n33, n34, n35};
 
     std::vector<NodeSalesman> nearTowns;
     std::vector<EdgeSalesman> paths;
@@ -59,7 +55,6 @@ int main()
         std::vector<NodeSalesman> nearTowns;
         g.addNode(*n);
     }
-
 
     // Edges container
     std::vector<EdgeSalesman *> edges;
@@ -81,19 +76,22 @@ int main()
 
     std::cout << g << std::endl;
 
-    std::vector<std::vector<NodeSalesman *> > hamCycles;
-    g.hamCycle(2, &hamCycles);
+    std::vector<std::vector<NodeSalesman *>> hamCycles;
+    g.hamCycle(120, &hamCycles);
+    std::cout << "Found " << hamCycles.size() << " hamilton cycles."
+              << std::endl;
 
-    g.displayPath(hamCycles.at(1));
-    g.renderGraph("graph.svg", 1000, 1000, &hamCycles.at(1));
-
-    std::cout << std::endl;
-
-    float dist = g.twoOpt(hamCycles.at(1));
-    g.displayPath(hamCycles.at(1));
-    std::cout << dist << std::endl;
-    g.renderGraph("graph2opt.svg", 1000, 1000, &hamCycles.at(1));
-
+    int i = 0;
+    for (auto p = hamCycles.begin(); p != hamCycles.end(); p++) {
+        float len = g.twoOpt(*p);
+        if (len < 4442) {
+            std::cout << i << "=" << len << std::endl;
+            g.renderGraph("salesman.svg", 1000, 1000, &(*p));
+            g.displayPath(*p);
+            break;
+        }
+        i++;
+    }
 
     // cleanup
     for (auto i = edges.begin(); i != edges.end(); i++) {
