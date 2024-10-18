@@ -1,5 +1,10 @@
 #include "GraphSalesman.hpp"
 #include <ostream>
+#include <chrono>
+#include <iostream>
+
+
+using namespace std::chrono;
 
 int main() {
     // rc::Graph<NodeSalesman, EdgeSalesman> g;
@@ -76,6 +81,7 @@ int main() {
 
     std::cout << g << std::endl;
 
+    auto start = high_resolution_clock::now();
     std::vector<std::vector<NodeSalesman *>> hamCycles;
     g.hamCycle(120, &hamCycles);
     std::cout << "Found " << hamCycles.size() << " hamilton cycles."
@@ -92,6 +98,10 @@ int main() {
         }
         i++;
     }
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(stop - start);
+
+    std::cout << "time :" << duration << std::endl;
 
     // cleanup
     for (auto i = edges.begin(); i != edges.end(); i++) {
