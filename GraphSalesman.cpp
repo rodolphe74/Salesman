@@ -1,4 +1,5 @@
 #include "GraphSalesman.hpp"
+#include <cmath>
 
 #include <simple_svg_1.0.0.hpp>
 using namespace svg;

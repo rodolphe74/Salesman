@@ -1,11 +1,11 @@
-CC=g++
-CFLAGS=-g -std=c++20 -I./simple-svg
+CC=clang++
+CFLAGS=-O2 -std=c++20 -I./simple-svg
 CLIBS=
 
 all: Main
 
 Main: Graph.o GraphSalesman.o Main.o
-	$(CC) $(CFLAGS) Main.o Graph.o GraphSalesman.o -o main $(CLIBS)
+	$(CC) $(CFLAGS) -o main Main.o Graph.o GraphSalesman.o $(CLIBS)
 
 Main.o: Main.cpp 
 	$(CC) $(CFLAGS) -c Main.cpp 
