@@ -146,7 +146,8 @@ template <class T, class U> class Graph {
     } // findHamCycle
 
   public:
-    Graph<>() {
+    Graph<T, U>() {
+    // Graph() {
         nodeIndex = 0;
         edgeIndex = 0;
     }

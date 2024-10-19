@@ -1,6 +1,13 @@
+# g++ compilation
+# CC=g++
+# CFLAGS=-O2 -std=c++20 -Wno-template-id-cdtor -I./simple-svg
+# CLIBS=
+
+# clang++ compilation
 CC=clang++
 CFLAGS=-O2 -std=c++20 -I./simple-svg
 CLIBS=
+
 
 all: Main
 
