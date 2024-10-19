@@ -3,11 +3,9 @@
 <img src = "salesman.svg" alt="Tour de France"/>
 
 # Le problème
-Année 1987. SVM publie un problème dans son "Demandez le programme" :
+Il s'agit pour un voyageur de commerce du parcourir un ensemble de 36 villes françaises avec la distance la plus courte en revenant à son point de départ.
 
 <img src = "svm/SVM_41_p0075.JPG" width="20%"> &nbsp; <img src = "svm/SVM_41_p0076.JPG" width="20%">
-
-Il s'agit pour un voyageur de commerce du parcourir un ensemble de 36 villes françaises avec la distance la plus courte.
 
 # Une solution
 1. Création d'un graphe en regroupant les villes les plus proches afin de limiter le nombre de chemins et faciliter la recherche.
